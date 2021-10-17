@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk config.sdk.compile
+
+    defaultConfig {
+        minSdk config.sdk.min
+        targetSdk config.sdk.target
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility config.jdk.version
+        targetCompatibility config.jdk.version
+    }
+
+    kotlinOptions {
+        jvmTarget = config.jdk.version.toString()
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation project(':domain')
+
+    implementation library.kotlin
+    implementation library.appcompat
+    implementation library.material
+    implementation library.constraintlayout
+    implementation library.cicerone
+
+    implementation library.activityKtx
+    implementation library.fragmentKtx
+
+    /* Dependency injection */
+    implementation library.hilt
+    kapt library.hiltCompiler
+
+    /* Logger */
+    implementation library.slf4j
+    implementation library.logback
+
+}

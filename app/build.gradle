@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk config.sdk.compile
+
+    defaultConfig {
+        minSdk config.sdk.min
+        targetSdk config.sdk.target
+        versionCode config.build.code
+        versionName config.build.name
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility config.jdk.version
+        targetCompatibility config.jdk.version
+    }
+
+    kotlinOptions {
+        jvmTarget = config.jdk.version.toString()
+    }
+
+    //https://github.com/google/dagger/issues/2805
+    hilt {
+        enableAggregatingTask = true
+    }
+}
+
+dependencies {
+
+    implementation library.kotlin
+
+    implementation library.hilt
+    kapt library.hiltCompiler
+
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':presentation')
+
+}

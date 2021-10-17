@@ -1,0 +1,38 @@
+ext.versions = [
+        /* Plugins */
+        gradlePlugin    : "4.2.2",
+        kotlinPlugin    : "1.5.21",
+        hiltPlugin      : "2.39.1",
+
+        /* Dependencies */
+        kotlin          : "1.5.21",
+        hilt            : "2.39.1",
+        appcompat       : "1.3.1",
+        material        : "1.4.0",
+        constraintlayout: "2.1.1",
+        cicerone        : "7.1",
+        activityKtx     : "1.3.1",
+        fragmentKtx     : "1.3.6",
+        slf4j           : "1.7.25",
+        logback         : "2.0.0",
+]
+
+ext.plugin = [
+        gradle: "com.android.tools.build:gradle:$versions.gradlePlugin",
+        kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinPlugin",
+        hilt  : "com.google.dagger:hilt-android-gradle-plugin:$versions.hiltPlugin"
+]
+
+ext.library = [
+        kotlin          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
+        hilt            : "com.google.dagger:hilt-android:$versions.hilt",
+        hiltCompiler    : "com.google.dagger:hilt-android-compiler:$versions.hilt",
+        appcompat       : "androidx.appcompat:appcompat:$versions.appcompat",
+        material        : "com.google.android.material:material:$versions.material",
+        constraintlayout: "androidx.constraintlayout:constraintlayout:$versions.constraintlayout",
+        cicerone        : "com.github.terrakok:cicerone:$versions.cicerone",
+        activityKtx     : "androidx.activity:activity-ktx:$versions.activityKtx",
+        fragmentKtx     : "androidx.fragment:fragment-ktx:$versions.fragmentKtx",
+        slf4j           : "org.slf4j:slf4j-api:$versions.slf4j",
+        logback         : "com.github.tony19:logback-android:$versions.logback"
+]

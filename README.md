@@ -1,1 +1,1 @@
-# nearby-restaurnts-demo
+# nearby-restaurants-demo

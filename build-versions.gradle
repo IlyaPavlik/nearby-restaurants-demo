@@ -1,0 +1,14 @@
+ext.config = [
+        build: [
+                code: 1,
+                name: "1.0"
+        ],
+        sdk  : [
+                min    : 23,
+                target : 31,
+                compile: 31
+        ],
+        jdk  : [
+                version: JavaVersion.VERSION_1_8
+        ]
+]
