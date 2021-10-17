@@ -17,6 +17,9 @@ class MainViewModel @Inject constructor(
 
     init {
         log.debug("init")
+    }
+
+    fun openMap() {
         router.replaceScreen(MainScreen.Map)
     }
 

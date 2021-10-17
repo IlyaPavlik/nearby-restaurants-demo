@@ -41,6 +41,7 @@ dependencies {
     implementation project(':domain')
 
     implementation library.kotlin
+    implementation library.coroutines
     implementation library.appcompat
     implementation library.material
     implementation library.constraintlayout
@@ -56,5 +57,7 @@ dependencies {
     /* Logger */
     implementation library.slf4j
     implementation library.logback
+
+    implementation library.playMaps
 
 }

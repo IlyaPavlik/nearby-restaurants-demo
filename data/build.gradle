@@ -37,9 +37,22 @@ dependencies {
     implementation project(':domain')
 
     implementation library.kotlin
+    implementation library.coroutines
 
     /* Dependency injection */
     implementation library.hilt
     kapt library.hiltCompiler
+
+    implementation library.playLocations
+
+    /* Network */
+    implementation library.okHttp3
+    implementation library.okHttp3LoggingInterceptor
+    implementation library.retrofit2
+    implementation library.retrofit2jackson
+
+    /* Serialization */
+    implementation library.jacksonCore
+    implementation library.jacksonKotlin
 
 }

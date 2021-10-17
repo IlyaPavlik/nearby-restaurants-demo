@@ -35,6 +35,7 @@ android {
 dependencies {
 
     implementation library.kotlin
+    implementation library.coroutines
 
     /* Dependency injection */
     implementation library.hilt
