@@ -14,6 +14,7 @@ import com.example.restaurants.domain.venue.model.Venue
 import com.example.restaurants.presentation.R
 import com.example.restaurants.presentation.common.ext.observeOnce
 import com.example.restaurants.presentation.databinding.FragmentMapBinding
+import com.example.restaurants.presentation.main.pages.details.DetailsBottomSheet
 import com.example.restaurants.presentation.main.pages.map.model.MapErrorType
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,7 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private val log by logger("MapFragment")
 
@@ -79,10 +80,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             isMyLocationEnabled = true
             setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style))
         }
+        map.setOnMarkerClickListener(this)
         map.setOnCameraIdleListener {
             viewModel.onVisibleRegionChanged(map.projection.visibleRegion)
         }
         viewModel.onMapReady()
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val venue = marker.tag as Venue
+        val bottomSheet = DetailsBottomSheet.newInstance(venue)
+        bottomSheet.show(requireActivity().supportFragmentManager)
+        return true
     }
 
     private fun initCurrentLocation(location: LocationLatLng) {
@@ -103,6 +112,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     .position(LatLng(venue.location.latitude, venue.location.longitude))
 
                 map?.addMarker(markerOptions)?.also { marker ->
+                    marker.tag = venue
                     markers[venue.id] = marker
                 }
             }
