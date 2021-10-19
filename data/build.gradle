@@ -55,4 +55,8 @@ dependencies {
     implementation library.jacksonCore
     implementation library.jacksonKotlin
 
+    /* Logger */
+    implementation library.slf4j
+    implementation library.logback
+
 }

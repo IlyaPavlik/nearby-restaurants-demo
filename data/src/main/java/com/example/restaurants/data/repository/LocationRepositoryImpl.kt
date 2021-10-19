@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Looper
 import com.example.restaurants.domain.location.model.LocationLatLng
+import com.example.restaurants.domain.location.model.LocationObservationType
 import com.example.restaurants.domain.location.repository.LocationRepository
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -23,34 +24,51 @@ class LocationRepositoryImpl @Inject constructor(
     private val fusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(context)
     }
-    private val locationRequest by lazy {
+    private val locationIntervalRequest by lazy {
         LocationRequest.create().apply {
             interval = LOCATION_UPDATE_INTERVAL
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+    }
+    private val locationDisplacementRequest by lazy {
+        LocationRequest.create().apply {
+            smallestDisplacement = SMALLEST_DISPLACEMENT
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
 
     @ExperimentalCoroutinesApi
     @SuppressLint("MissingPermission")
-    override fun observeCurrentLocation(): Flow<LocationLatLng> = callbackFlow {
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                trySend(LocationLatLng(result.lastLocation.latitude, result.lastLocation.longitude))
+    override fun observeCurrentLocation(type: LocationObservationType): Flow<LocationLatLng> =
+        callbackFlow {
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(result: LocationResult) {
+                    trySend(
+                        LocationLatLng(
+                            result.lastLocation.latitude,
+                            result.lastLocation.longitude
+                        )
+                    )
+                }
             }
+            val request = when (type) {
+                LocationObservationType.TIME_INTERVAL -> locationIntervalRequest
+                LocationObservationType.DISPLACEMENT -> locationDisplacementRequest
+            }
+
+            fusedLocationProviderClient.requestLocationUpdates(
+                request,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+
+            awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
         }
-
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-
-        awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
-    }
 
     companion object {
 
-        private const val LOCATION_UPDATE_INTERVAL = 10000L //ms
+        private const val LOCATION_UPDATE_INTERVAL = 30000L //30sec
+        private const val SMALLEST_DISPLACEMENT = 10F //meters
 
     }
 

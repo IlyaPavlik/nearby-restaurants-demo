@@ -5,23 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.restaurants.domain.common.ext.logger
 import com.example.restaurants.domain.location.model.LocationLatLng
+import com.example.restaurants.domain.venue.model.Venue
 import com.example.restaurants.presentation.R
 import com.example.restaurants.presentation.common.ext.observeOnce
 import com.example.restaurants.presentation.databinding.FragmentMapBinding
+import com.example.restaurants.presentation.main.pages.map.model.MapErrorType
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
+class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val log by logger("MapFragment")
 
@@ -31,6 +36,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
     private val viewModel: MapViewModel by viewModels()
 
     private var map: GoogleMap? = null
+    private val markers = HashMap<String, Marker>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +53,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
             ?.getMapAsync(this)
 
         viewModel.locationLiveData.observeOnce(viewLifecycleOwner, ::initCurrentLocation)
+        viewModel.venusLiveData.observe(viewLifecycleOwner, ::showVenues)
+        viewModel.errorToastLiveData.observe(viewLifecycleOwner, ::showMapError)
     }
 
     override fun onResume() {
@@ -71,13 +79,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
             isMyLocationEnabled = true
             setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style))
         }
-        map.setOnMyLocationButtonClickListener(this)
+        map.setOnCameraIdleListener {
+            viewModel.onVisibleRegionChanged(map.projection.visibleRegion)
+        }
         viewModel.onMapReady()
-    }
-
-    override fun onMyLocationButtonClick(): Boolean {
-        log.debug("onMyLocationButtonClick")
-        return false
     }
 
     private fun initCurrentLocation(location: LocationLatLng) {
@@ -86,9 +91,42 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButton
         map?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_CURRENT_LOCATION_ZOOM))
     }
 
+    private fun showVenues(venues: List<Venue>) {
+        val newVenueIds = HashSet<String>()
+
+        // add new markers
+        venues.forEach { venue ->
+            newVenueIds.add(venue.id)
+            if (!markers.containsKey(venue.id)) {
+                val markerOptions = MarkerOptions()
+                    .title(venue.name)
+                    .position(LatLng(venue.location.latitude, venue.location.longitude))
+
+                map?.addMarker(markerOptions)?.also { marker ->
+                    markers[venue.id] = marker
+                }
+            }
+        }
+
+        // remove old markers
+        markers.keys.removeAll { id ->
+            val needToRemove = !newVenueIds.contains(id)
+            if (needToRemove) markers[id]?.remove()
+            needToRemove
+        }
+    }
+
+    private fun showMapError(error: MapErrorType) {
+        showToast(getString(error.errorResId))
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
 
-        private const val DEFAULT_CURRENT_LOCATION_ZOOM = 15F
+        private const val DEFAULT_CURRENT_LOCATION_ZOOM = 18F
 
         fun newInstance() = MapFragment()
 
