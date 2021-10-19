@@ -45,4 +45,10 @@ dependencies {
     implementation library.slf4j
     implementation library.logback
 
+    /* Tests */
+    testImplementation library.junit
+    testImplementation library.mockito
+    testImplementation library.mockitoKotlin
+    testImplementation library.coroutinesTest
+
 }

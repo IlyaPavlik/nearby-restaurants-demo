@@ -22,6 +22,9 @@ ext.versions = [
         retrofit2       : "2.6.2",
         jackson         : "2.10.3",
         jacksonJoda     : "2.10.3",
+        junit           : "4.13",
+        mockito         : "3.12.4",
+        mockitoKotlin   : "3.2.0",
 ]
 
 ext.plugin = [
@@ -33,6 +36,7 @@ ext.plugin = [
 ext.library = [
         kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin",
         coroutines               : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines",
+        coroutinesTest           : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines",
         hilt                     : "com.google.dagger:hilt-android:$versions.hilt",
         hiltCompiler             : "com.google.dagger:hilt-android-compiler:$versions.hilt",
         appcompat                : "androidx.appcompat:appcompat:$versions.appcompat",
@@ -51,4 +55,7 @@ ext.library = [
         retrofit2jackson         : "com.squareup.retrofit2:converter-jackson:$versions.retrofit2",
         jacksonCore              : "com.fasterxml.jackson.core:jackson-core:$versions.jackson",
         jacksonKotlin            : "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jackson",
+        junit                    : "junit:junit:$versions.junit",
+        mockito                  : "org.mockito:mockito-core:$versions.mockito",
+        mockitoKotlin            : "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin",
 ]

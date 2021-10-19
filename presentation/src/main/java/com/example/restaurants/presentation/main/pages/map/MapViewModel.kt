@@ -16,8 +16,11 @@ import com.example.restaurants.presentation.main.pages.map.model.MapErrorType
 import com.google.android.gms.maps.model.VisibleRegion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,7 +56,9 @@ class MapViewModel @Inject constructor(
         }
 
         viewModelScope.launch(venuesErrorHandler) {
-            val venues = venueInteractor.searchFoodVenues(venuesRegion)
+            val venues = withContext(Dispatchers.IO) {
+                venueInteractor.searchFoodVenues(venuesRegion)
+            }
             log.debug("Region venues: ${venues.size}")
             _venusLiveData.value = venues
         }
@@ -66,6 +71,7 @@ class MapViewModel @Inject constructor(
         }
         viewModelScope.launch(locationErrorHandler) {
             locationInteractor.observeCurrentLocation(LocationObservationType.DISPLACEMENT)
+                .flowOn(Dispatchers.IO)
                 .collect { location -> _locationLiveData.value = location }
         }
     }
