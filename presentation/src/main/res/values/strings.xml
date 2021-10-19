@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Nearby restaurants</string>
 
+    <string name="common_ok">OK</string>
+
     <string name="error_location">Cannot load current location</string>
     <string name="error_venues">Cannot load visible venues</string>
+
+    <string name="permission_title">Permission</string>
+    <string name="location_permission_denied">This app requires location permission to show your location on the map. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Nearby restaurants\'.</string>
 </resources>

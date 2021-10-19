@@ -13,6 +13,7 @@ import com.example.restaurants.presentation.common.navigation.NavigationManager
 import com.example.restaurants.presentation.databinding.ActivityMainBinding
 import com.example.restaurants.presentation.main.navigation.MainScreen
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -63,15 +64,16 @@ class MainActivity : AppCompatActivity() {
     ) {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (isPermissionGranted(
-                        permissions,
-                        grantResults,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-                ) {
+                val fineLocationGranted = isPermissionGranted(
+                    permissions,
+                    grantResults,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                if (fineLocationGranted) {
                     viewModel.openMap()
                 } else {
-                    //TODO probable close the app
+                    log.warn("Permissions are not granted")
+                    finish()
                 }
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -82,18 +84,13 @@ class MainActivity : AppCompatActivity() {
      * Enables the My Location layer if the fine location permission has been granted.
      */
     private fun enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        val fineLocationGranted = isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)
+        if (fineLocationGranted) {
             viewModel.openMap()
         } else {
-            // Permission to access the location is missing. Show rationale and request permission
             requestPermission(
-                this, LOCATION_PERMISSION_REQUEST_CODE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                true
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
             )
         }
     }
@@ -102,17 +99,24 @@ class MainActivity : AppCompatActivity() {
      * Requests the fine location permission. If a rationale with an additional explanation should
      * be shown to the user, displays a dialog that triggers the request.
      */
-    private fun requestPermission(
-        activity: AppCompatActivity,
-        requestId: Int,
-        permission: String,
-        finishActivity: Boolean
-    ) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-            //TODO Display a dialog with rationale.
+    private fun requestPermission(activity: AppCompatActivity, vararg permissions: String) {
+        val shouldShowRationale = permissions.all { permission ->
+            ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+        }
+
+        if (shouldShowRationale) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.permission_title))
+                .setMessage(getString(R.string.location_permission_denied))
+                .setPositiveButton(getString(R.string.common_ok)) { _, _ -> finish() }
+                .show()
         } else {
             // Location permission has not been granted yet, request it.
-            ActivityCompat.requestPermissions(activity, arrayOf(permission), requestId)
+            ActivityCompat.requestPermissions(
+                activity,
+                permissions,
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
@@ -133,6 +137,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    private fun isPermissionGranted(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {
