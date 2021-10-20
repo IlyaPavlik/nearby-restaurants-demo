@@ -6,16 +6,16 @@ import com.example.restaurants.domain.venue.model.VenuesRegion
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.VisibleRegion
 
-fun VisibleRegion.toVenuesRegion() = VenuesRegion(
+internal fun VisibleRegion.toVenuesRegion() = VenuesRegion(
     southwest = latLngBounds.southwest.toLocationLatLng(),
     northeast = latLngBounds.northeast.toLocationLatLng(),
     center = latLngBounds.center.toLocationLatLng(),
     radius = getVisibleRadius()
 )
 
-fun LatLng.toLocationLatLng() = LocationLatLng(latitude, longitude)
+internal fun LatLng.toLocationLatLng() = LocationLatLng(latitude, longitude)
 
-fun VisibleRegion.getVisibleRadius(): Float {
+internal fun VisibleRegion.getVisibleRadius(): Float {
     val distanceWidth = FloatArray(1)
     //calculate the distance between left <-> right of map on screen
     Location.distanceBetween(

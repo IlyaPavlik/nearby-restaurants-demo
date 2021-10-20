@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.restaurants.domain.common.architecture.SingleLiveEvent
 import com.example.restaurants.domain.common.ext.logger
 import com.example.restaurants.domain.location.LocationInteractor
 import com.example.restaurants.domain.location.model.LocationLatLng
 import com.example.restaurants.domain.location.model.LocationObservationType
 import com.example.restaurants.domain.venue.VenueInteractor
 import com.example.restaurants.domain.venue.model.Venue
+import com.example.restaurants.presentation.common.architecture.SingleLiveEvent
 import com.example.restaurants.presentation.common.ext.toVenuesRegion
 import com.example.restaurants.presentation.main.pages.map.model.MapErrorType
 import com.google.android.gms.maps.model.VisibleRegion
@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MapViewModel @Inject constructor(
+internal class MapViewModel @Inject constructor(
     private val locationInteractor: LocationInteractor,
     private val venueInteractor: VenueInteractor
 ) : ViewModel() {

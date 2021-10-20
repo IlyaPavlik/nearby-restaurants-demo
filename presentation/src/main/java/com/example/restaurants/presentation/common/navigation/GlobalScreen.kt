@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import com.github.terrakok.cicerone.androidx.ActivityScreen
 
-class GlobalScreen {
+internal class GlobalScreen {
 
     object Settings : ActivityScreen {
         override fun createIntent(context: Context): Intent =

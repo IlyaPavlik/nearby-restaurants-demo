@@ -7,11 +7,11 @@ import com.example.restaurants.domain.venue.model.Venue
 import com.example.restaurants.domain.venue.model.VenueCategory
 import com.example.restaurants.domain.venue.model.VenueLocation
 
-fun VenueCategory.toRemoteCategory(): VenueCategoryRemote = when (this) {
+internal fun VenueCategory.toRemoteCategory(): VenueCategoryRemote = when (this) {
     VenueCategory.FOOD -> VenueCategoryRemote.FOOD
 }
 
-fun VenueRemote.toVenue() = Venue(
+internal fun VenueRemote.toVenue() = Venue(
     id ?: "",
     name ?: "",
     location?.toVenueLocation() ?: EMPTY_LOCATION

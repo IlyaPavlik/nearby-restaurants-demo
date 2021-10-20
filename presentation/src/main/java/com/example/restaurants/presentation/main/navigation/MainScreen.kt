@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import com.example.restaurants.presentation.main.pages.map.MapFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
-object MainScreen {
+internal object MainScreen {
 
     object Map : FragmentScreen {
         override fun createFragment(factory: FragmentFactory): Fragment =
