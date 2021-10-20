@@ -11,6 +11,8 @@ android {
     defaultConfig {
         minSdk config.sdk.min
         targetSdk config.sdk.target
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -57,5 +59,11 @@ dependencies {
     implementation library.logback
 
     implementation library.playMaps
+
+    /* Tests */
+    testImplementation library.junit
+    testImplementation library.mockito
+    testImplementation library.mockitoKotlin
+    testImplementation library.coroutinesTest
 
 }
