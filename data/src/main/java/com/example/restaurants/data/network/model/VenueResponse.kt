@@ -1,3 +1,5 @@
 package com.example.restaurants.data.network.model
 
-data class VenueResponse(val venues: List<VenueRemote>?)
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class VenueResponse(@JsonProperty("venues") val venues: List<VenueRemote>?)

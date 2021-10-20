@@ -1,11 +1,13 @@
 package com.example.restaurants.data.network.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class VenueLocationRemote(
-    val address: String?,
-    val crossStreet: String?,
-    val lat: Double?,
-    val lng: Double?,
-    val city: String?,
-    val state: String?,
-    val country: String?
+    @JsonProperty("address") val address: String?,
+    @JsonProperty("crossStreet") val crossStreet: String?,
+    @JsonProperty("lat") val lat: Double?,
+    @JsonProperty("lng") val lng: Double?,
+    @JsonProperty("city") val city: String?,
+    @JsonProperty("state") val state: String?,
+    @JsonProperty("country") val country: String?
 )

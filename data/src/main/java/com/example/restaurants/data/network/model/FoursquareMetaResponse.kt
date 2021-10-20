@@ -1,12 +1,14 @@
 package com.example.restaurants.data.network.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class FoursquareMetaResponse<Response>(
-    val meta: Meta,
-    val response: Response
+    @JsonProperty("meta") val meta: Meta,
+    @JsonProperty("response") val response: Response
 ) {
 
     data class Meta(
-        val code: String?,
-        val requestId: String?
+        @JsonProperty("code") val code: String?,
+        @JsonProperty("requestId") val requestId: String?
     )
 }
