@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.restaurants.domain.common.ext.logger
 import com.example.restaurants.presentation.R
+import com.example.restaurants.presentation.common.navigation.GlobalNavigator
 import com.example.restaurants.presentation.common.navigation.NavigationManager
 import com.example.restaurants.presentation.databinding.ActivityMainBinding
 import com.example.restaurants.presentation.main.navigation.MainScreen
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResumeFragments() {
         super.onResumeFragments()
         log.debug("onResumeFragments")
+        navigationManager.getGlobalNavigationHolder().setNavigator(GlobalNavigator(this))
         navigationManager.getNavigationHolder(MainScreen).setNavigator(navigator)
     }
 
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         log.debug("onPause")
         navigationManager.getNavigationHolder(MainScreen).removeNavigator()
+        navigationManager.getGlobalNavigationHolder().removeNavigator()
     }
 
     override fun onDestroy() {
@@ -108,7 +111,9 @@ class MainActivity : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.permission_title))
                 .setMessage(getString(R.string.location_permission_denied))
-                .setPositiveButton(getString(R.string.common_ok)) { _, _ -> finish() }
+                .setPositiveButton(getString(R.string.permission_settings)) { _, _ -> viewModel.openAppSettings() }
+                .setNegativeButton(getString(R.string.permission_exit)) { _, _ -> finish() }
+                .setCancelable(false)
                 .show()
         } else {
             // Location permission has not been granted yet, request it.

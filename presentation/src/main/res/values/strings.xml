@@ -8,4 +8,6 @@
 
     <string name="permission_title">Permission</string>
     <string name="location_permission_denied">This app requires location permission to show your location on the map. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Nearby restaurants\'.</string>
+    <string name="permission_settings">Settings</string>
+    <string name="permission_exit">Exit</string>
 </resources>

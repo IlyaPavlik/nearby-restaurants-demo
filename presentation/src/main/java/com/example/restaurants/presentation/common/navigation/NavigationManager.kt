@@ -7,9 +7,14 @@ import javax.inject.Inject
 
 class NavigationManager @Inject constructor() {
 
+    private val globalCicerone = Cicerone.create(Router())
     private val localCiceroneMap = HashMap<String, Cicerone<Router>>()
 
+    fun getGlobalRouter(): Router = globalCicerone.router
+
     fun getRouter(tag: Any): Router = getCicerone("$tag").router
+
+    fun getGlobalNavigationHolder(): NavigatorHolder = globalCicerone.getNavigatorHolder()
 
     fun getNavigationHolder(tag: Any): NavigatorHolder = getCicerone("$tag").getNavigatorHolder()
 
