@@ -11,6 +11,12 @@ class VenueInteractor @Inject constructor(private val venueRepository: VenueRepo
 
     private val log by logger("VenueInteractor")
 
+    /**
+     * Search nearby restaurants in the defined region.
+     *
+     * @param venuesRegion visible region on the map
+     * @return list of found venues
+     */
     suspend fun searchFoodVenues(venuesRegion: VenuesRegion): List<Venue> {
         val category = VenueCategory.FOOD
         val cachedVenues = venueRepository.findCachedVenues(category, venuesRegion)

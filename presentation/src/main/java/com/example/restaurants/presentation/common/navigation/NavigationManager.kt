@@ -5,6 +5,10 @@ import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import javax.inject.Inject
 
+/**
+ * Navigation manager manages navigation holders for different screen chains.
+ * https://github.com/terrakok/Cicerone
+ */
 class NavigationManager @Inject constructor() {
 
     private val globalCicerone = Cicerone.create(Router())

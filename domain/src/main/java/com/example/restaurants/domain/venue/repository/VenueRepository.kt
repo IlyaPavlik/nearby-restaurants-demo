@@ -8,6 +8,10 @@ interface VenueRepository {
 
     /**
      * Search venues on the server
+     *
+     * @param category category of the venue
+     * @param venuesRegion visible region on the map
+     * @return list of found venues
      */
     suspend fun findRemoteVenues(
         category: VenueCategory,
@@ -16,6 +20,10 @@ interface VenueRepository {
 
     /**
      * Search venues in cache
+     *
+     * @param category category of the venue
+     * @param venuesRegion visible region on the map
+     * @return list of found venues
      */
     suspend fun findCachedVenues(
         category: VenueCategory,
@@ -25,6 +33,10 @@ interface VenueRepository {
     /**
      * Save venues to cache
      * If passed venuesRegion contains cached regions they will be replaced by the new bigger region
+     *
+     * @param category category of the venue
+     * @param venuesRegion visible region on the map
+     * @param venues list of venues
      */
     suspend fun saveVenuesToCache(
         category: VenueCategory,

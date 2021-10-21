@@ -7,6 +7,9 @@ import com.github.terrakok.cicerone.androidx.ActivityScreen
 
 internal class GlobalScreen {
 
+    /**
+     * App settings screen, see [android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS]
+     */
     object Settings : ActivityScreen {
         override fun createIntent(context: Context): Intent =
             Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
